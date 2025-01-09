@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"net"
 	"time"
-	"regexp"
+	// "regexp"
+	"strconv"
 
 )
 
@@ -28,29 +29,38 @@ func title() {
 func main() {
 
 	title()
-	re := regexp.MustCompile(`:.*$`)
+	// re := regexp.MustCompile(`:.*$`)
 	var addr string
-	
+	// var ipaddr string
+
 	fmt.Println("Please give address and port e.g. 8.8.8.8:53 : ")
 	fmt.Scanf("%s", &addr)
 
-	timeout := 10 * time.Second
-	conn, err := net.DialTimeout("tcp", addr, timeout)
-	if err != nil {
-		fmt.Println("Connection Failed :(")
-		fmt.Println(err)
-		return
+	for i := 50; i < 55; i++ {
+
+		var ipaddr = addr + ":" + strconv.Itoa(i)
+		fmt.Println(ipaddr)
+		timeout := 20 * time.Second
+		conn, err := net.DialTimeout("tcp", ipaddr, timeout)
+		fmt.Println(conn)
+		if err != nil {
+			fmt.Println(strconv.Itoa(i) + " Is Closed.")
+			// fmt.Println("Connection Failed :(")
+			// fmt.Println(err)
+		} else {
+			fmt.Println(strconv.Itoa(i) + " Is Open.")
+		}
+
+		// defer conn.Close()
+
+	// addrfixed := re.ReplaceAllString(addr, "")
+
+
+	//fmt.Println(conn.RemoteAddr())
+	//fmt.Println(conn.LocalAddr())
+	// fmt.Println(net.LookupAddr(addrfixed))
+	//fmt.Println()
+
 	}
-
-	defer conn.Close()
-
-	addrfixed := re.ReplaceAllString(addr, "")
-
-
-	fmt.Println(conn.RemoteAddr())
-	fmt.Println(conn.LocalAddr())
-	fmt.Println(net.LookupAddr(addrfixed))
-
-
 }
 
